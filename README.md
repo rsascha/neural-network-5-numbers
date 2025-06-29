@@ -1,5 +1,8 @@
 # Neutal Network 5 Numbers
 
+- https://playground.tensorflow.org/
+- https://www.hartundtrocken.de/
+
 ## Development
 
 ### Tooling
