@@ -1,0 +1,7 @@
+{
+  "xml.validation.enabled": false,
+  "files.associations": {
+    "*.svg": "xml"
+  },
+  "xml.validation.noGrammar": "ignore"
+}

@@ -1,0 +1,99 @@
+@startuml neuron
+!theme plain
+title Single Neuron Architecture
+
+rectangle "Input Layer" as inputs {
+  rectangle "x₁" as x1
+  rectangle "x₂" as x2
+  rectangle "x₃" as x3
+  rectangle "x₄" as x4
+  rectangle "x₅" as x5
+}
+
+rectangle "Neuron" as neuron {
+  rectangle "Weighted Sum\n+ Bias" as sum
+  rectangle "Activation\nFunction\nσ(z)" as activation
+  
+  sum --> activation : "z = Σ(wᵢ × xᵢ) + b"
+}
+
+rectangle "Output" as output {
+  rectangle "y" as y
+}
+
+' Connections with weights
+x1 --> sum : "w₁"
+x2 --> sum : "w₂"
+x3 --> sum : "w₃"
+x4 --> sum : "w₄"
+x5 --> sum : "w₅"
+
+activation --> y : "y = σ(z)"
+
+note top of neuron
+  **Single Neuron Components:**
+  • Weights: w₁, w₂, w₃, w₄, w₅
+  • Bias: b
+  • Activation Function: σ (sigmoid)
+  
+  **Forward Pass:**
+  1. z = w₁×x₁ + w₂×x₂ + w₃×x₃ + w₄×x₄ + w₅×x₅ + b
+  2. y = σ(z) = 1 / (1 + e^(-z))
+end note
+
+note bottom of neuron
+  **Mathematical Representation:**
+  z = Σᵢ(wᵢ × xᵢ) + b
+  y = σ(z)
+  
+  **In TypeScript:**
+  const sum = weights.reduce((acc, w, i) => acc + w * inputs[i], bias);
+  const output = sigmoid(sum);
+end note
+
+rectangle "Weight Initialization" as init
+note right of init
+  **Random Initialization:**
+  • Weights: [-1, +1] random values
+  • Bias: [-1, +1] random value
+  
+  **Code:**
+  weights = Array(inputCount)
+    .fill(0)
+    .map(() => Math.random() * 2 - 1);
+  bias = Math.random() * 2 - 1;
+end note
+
+rectangle "Training Process" as training
+note left of training
+  **Learning Process:**
+  1. Forward pass: compute output
+  2. Calculate error: (output - target)
+  3. Backpropagation: compute gradients
+  4. Update weights: w = w - α × ∂L/∂w
+  5. Update bias: b = b - α × ∂L/∂b
+  
+  **Learning Rate α controls step size**
+end note
+
+rectangle "Activation Function Details" as activation_details
+note bottom of activation_details
+  **Sigmoid Properties:**
+  • Domain: (-∞, +∞)
+  • Range: (0, 1)
+  • Smooth S-curve
+  • Differentiable everywhere
+  • Non-linear transformation
+  
+  **Why Sigmoid?**
+  • Squashes output to [0,1]
+  • Smooth gradients
+  • Clear probabilistic interpretation
+end note
+
+' Additional connections for layout
+inputs --> init
+training --> neuron
+activation_details --> activation
+
+@enduml

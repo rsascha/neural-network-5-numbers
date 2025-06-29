@@ -1,8 +1,6 @@
 {
   "name": "neural-network-5-numbers",
-  "scripts": {
-    "start": "tsx src/run.ts"
-  },
+  "type": "module",
   "dependencies": {
     "tsx": "^4.20.3",
     "typescript": "^5.8.3"
