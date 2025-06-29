@@ -1,8 +1,9 @@
 #!npx tsx
 
+import { relu, reluDerivative } from "./activation";
 import { SimpleNetwork } from "./network";
 
-const net = new SimpleNetwork(5, 3);
+const net = new SimpleNetwork(5, 3, relu, reluDerivative);
 
 console.log("Training des neuronalen Netzwerks auf Sequenzmuster:");
 
@@ -77,4 +78,4 @@ for (const seq of testSequences) {
   console.log(`${seq} → Vorhersage: ${prediction.toFixed(3)}`);
 }
 
-net.saveToFile("sequence-learning.json");
+net.saveToFile("sequence-learning-relu.json");

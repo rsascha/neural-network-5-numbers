@@ -1,5 +1,5 @@
 import { sigmoid, sigmoidDerivative } from "../activation";
-
+import * as fs from "fs";
 /**
  * Simple neural network with one hidden layer and one output.
  * This network is designed to predict a single output based on five input values.
@@ -13,7 +13,12 @@ export class SimpleNetwork {
   biases: number[];
   learningRate = 0.1;
 
-  constructor(public inputSize: number, public hiddenSize: number) {
+  constructor(
+    public inputSize: number,
+    public hiddenSize: number,
+    public activationFunction: (x: number) => number = sigmoid,
+    public activationDerivative: (x: number) => number = sigmoidDerivative
+  ) {
     // Input → Hidden: Matrix mit inputSize × hiddenSize
     this.weights = [];
     for (let h = 0; h < hiddenSize; h++) {
@@ -114,5 +119,32 @@ export class SimpleNetwork {
       this.biases[h] -= this.learningRate * hiddenGradients[h];
     }
     this.biases[this.hiddenSize] -= this.learningRate * outputGradient;
+  }
+
+  saveToFile(filename: string): void {
+    const data = {
+      inputSize: this.inputSize,
+      hiddenSize: this.hiddenSize,
+      weights: this.weights,
+      biases: this.biases,
+      activationFunction: this.activationFunction.toString(),
+      activationDerivative: this.activationDerivative.toString(),
+    };
+    fs.writeFileSync(filename, JSON.stringify(data, null, 2));
+  }
+
+  static loadFromFile(filename: string): SimpleNetwork {
+    const data = JSON.parse(fs.readFileSync(filename, "utf-8"));
+    const activationFunction = eval(data.activationFunction);
+    const activationDerivative = eval(data.activationDerivative);
+    const net = new SimpleNetwork(
+      data.inputSize,
+      data.hiddenSize,
+      activationFunction,
+      activationDerivative
+    );
+    net.weights = data.weights;
+    net.biases = data.biases;
+    return net;
   }
 }
